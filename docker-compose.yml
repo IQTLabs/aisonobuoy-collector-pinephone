@@ -1,0 +1,32 @@
+version: "3"
+services:
+  mqtt:
+    image: iqtlabs/edgetech-mqtt:latest
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    build:
+      context: ./edgetech-core/mqtt
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+  core:
+    image: iqtlabs/edgetech-core:latest
+    network_mode: "host"
+    build:
+      context: ./edgetech-core/core
+      dockerfile: ./Dockerfile
+    depends_on: 
+      - mqtt
+  daisy:
+    image: iqtlabs/edgetech-daisy:latest
+    network_mode: "host"
+    devices:
+      - "/dev/ttyACM0:/dev/serial0"
+    environment:
+      - MQTT_IP=127.0.0.1
+    build:
+      context: ./edgetech-daisy/daisy
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    depends_on: 
+      - mqtt
