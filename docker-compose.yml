@@ -6,13 +6,13 @@ services:
       - "1883:1883"
       - "9001:9001"
     build:
-      context: ./mqtt
+      context: ./edgetech-core/mqtt
       dockerfile: ./Dockerfile
     restart: unless-stopped
   filesaver:
     image: iqtlabs/edgetech-filesaver:latest
     build:
-      context: ../edgetech-filesaver/filesaver
+      context: ./edgetech-filesaver/filesaver
       dockerfile: ./Dockerfile
     environment:
       - TO_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/AIS/edgetech-daisy/bytestring
@@ -29,7 +29,7 @@ services:
   core:
     image: iqtlabs/edgetech-core:latest
     build:
-      context: ./core
+      context: ./edgetech-core/core
       dockerfile: ./Dockerfile
     depends_on: 
       - mqtt
@@ -40,7 +40,7 @@ services:
     environment:
       - MQTT_IP=mqtt
     build:
-      context: ../edgetech-daisy/daisy
+      context: ./edgetech-daisy/daisy
       dockerfile: ./Dockerfile
     restart: unless-stopped
     depends_on: 
