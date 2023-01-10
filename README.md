@@ -8,8 +8,8 @@ aisonobuoy-collector-pinephone
 |-- docker-compose.yaml
 |-- edgetech-core
 |-- edgetech-daisy
-... IN PROGRESS
 |-- edgetech-filesaver
+... IN PROGRESS
 |-- edgetech-pinephone-telemetry
 |-- edgetech-couchdb
 |-- edgetech-s3-uploader

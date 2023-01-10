@@ -6,27 +6,43 @@ services:
       - "1883:1883"
       - "9001:9001"
     build:
-      context: ./edgetech-core/mqtt
+      context: ./mqtt
       dockerfile: ./Dockerfile
     restart: unless-stopped
+  filesaver:
+    image: iqtlabs/edgetech-filesaver:latest
+    build:
+      context: ../edgetech-filesaver/filesaver
+      dockerfile: ./Dockerfile
+    environment:
+      - TO_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/AIS/edgetech-daisy/bytestring
+      - C2C_TOPIC=/AISonobuoy/<HOSTNAME>/C2C/edgetech-c2c/string
+      - DATA_ROOT=/sensor-data
+      - SENSOR_DIR=ais
+      - FILE_PREFIX=daisy_ais_
+      - MQTT_IP=mqtt
+    volumes:
+      - /home/mobian/sensor-data:/sensor-data
+    restart: unless-stopped
+    depends_on: 
+      - mqtt
   core:
     image: iqtlabs/edgetech-core:latest
-    network_mode: "host"
     build:
-      context: ./edgetech-core/core
+      context: ./core
       dockerfile: ./Dockerfile
     depends_on: 
       - mqtt
   daisy:
     image: iqtlabs/edgetech-daisy:latest
-    network_mode: "host"
     devices:
       - "/dev/ttyACM0:/dev/serial0"
     environment:
-      - MQTT_IP=127.0.0.1
+      - MQTT_IP=mqtt
     build:
-      context: ./edgetech-daisy/daisy
+      context: ../edgetech-daisy/daisy
       dockerfile: ./Dockerfile
     restart: unless-stopped
     depends_on: 
       - mqtt
+  
