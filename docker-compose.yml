@@ -38,6 +38,8 @@ services:
     devices:
       - "/dev/ttyACM0:/dev/serial0"
     environment:
+      - SEND_DATA_TOPIC=/AISonobuoy/<HOSTNAME>/AIS/edgetech-daisy/bytestring
+      - SERIAL_PORT=/dev/serial0
       - MQTT_IP=mqtt
     build:
       context: ./edgetech-daisy/daisy
@@ -45,4 +47,16 @@ services:
     restart: unless-stopped
     depends_on: 
       - mqtt
-  
+  c2:
+    image: iqtlabs/edgetech-c2:latest
+    build:
+      context: ./edgetech-c2/c2
+      dockerfile: ./Dockerfile
+    environment:
+      - NEXT_FILE_TOPIC=/AISonobuoy/<HOSTNAME>/C2/edgetech-c2/string
+      - MQTT_IP=mqtt
+    volumes:
+      - /home/mobian/sensor-data:/sensor-data
+    restart: unless-stopped
+    depends_on: 
+      - mqtt
