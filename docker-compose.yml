@@ -74,3 +74,64 @@ services:
     restart: unless-stopped
     depends_on: 
       - mqtt
+  couchdbsaver:
+    image: iqtlabs/edgetech-couchdbsaver:latest
+    build:
+      context: ./edgetech-couchdb-saver/couchdbsaver
+      dockerfile: ./Dockerfile
+    environment:
+      - TO_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/AIS/edgetech-daisy/bytestring
+      - MQTT_IP=mqtt
+      - COUCHDB_USER=${COUCHDB_USER}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
+      - COUCHDB_SERVER_IP_ADDR=${COUCHDB_SERVER_IP_ADDR}
+    volumes:
+      - /home/mobian/sensor-data:/sensor-data
+    restart: unless-stopped
+    depends_on: 
+      - mqtt
+      - couchdbserver
+      - couchdbsetup
+  couchdbserver:
+    image: couchdb
+    restart: always
+    ports:
+      - "5984:5984"
+    environment:
+      - COUCHDB_USER=${COUCHDB_USER}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
+      - COUCHDB_SERVER_IP_ADDR=${COUCHDB_SERVER_IP_ADDR}
+    volumes:
+        - /home/mobian/dbdata:/opt/couchdb/data
+  couchdbsetup:
+    image: couchdb
+    volumes:
+      - ./edgetech-database-sync/couchdb/setup:/setup
+    environment:
+      - COUCHDB_USER=${COUCHDB_USER}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
+      - COUCHDB_SERVER_IP_ADDR=${COUCHDB_SERVER_IP_ADDR}
+      - PERIPHERAL=${PERIPHERAL}  
+    restart: "no"
+    command: sh -c "/setup/couchdbinit.sh"
+    depends_on: 
+        - couchdbserver
+  # audio-recorder:
+  #   image: iqtlabs/edgetech-audio-recorder:latest
+  #   build:
+  #     context: ../edgetech-audio-recorder/audiorecorder
+  #     dockerfile: ./Dockerfile
+  #   environment:
+  #   devices:
+  #     - "/dev/snd:/dev/serial1"
+  #   restart: unless-stopped
+  #   environment:
+  #     - SEND_DATA_TOPIC=/AISonobuoy/<HOSTNAME>/Audio/edgetech-audio-recorder/string
+  #     - SERIAL_PORT=/dev/serial1
+  #     - C2_TOPIC=/AISonobuoy/<HOSTNAME>/C2/edgetech-c2/string
+  #     - DATA_ROOT=/sensor-data
+  #     - SENSOR_DIR=audio
+  #     - FILE_PREFIX=hydrophone_audio_
+  #     - MQTT_IP=mqtt
+  #   volumes:
+  #     - /home/mobian/sensor-data:/sensor-data

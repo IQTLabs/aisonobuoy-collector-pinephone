@@ -11,9 +11,10 @@ aisonobuoy-collector-pinephone
 |-- edgetech-filesaver
 |-- edgetech-c2c
 |-- edgetech-pinephone-telemetry
+|-- edgetech-couchdb-saver
+|-- edgetech-database-sync
 ... IN PROGRESS
 |-- edgetech-audio-recorder
-|-- edgetech-couchdb
 |-- edgetech-s3-uploader
 ```
 
