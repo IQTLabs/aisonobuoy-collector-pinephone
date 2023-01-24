@@ -12,7 +12,7 @@ services:
   audio-recorder:
     image: iqtlabs/edgetech-audio-recorder:latest
     build:
-      context: ../edgetech-audio-recorder/audiorecorder
+      context: ./edgetech-audio-recorder/audiorecorder
       dockerfile: ./Dockerfile
     environment:
     devices:
@@ -121,7 +121,7 @@ services:
       - couchdbsetup
   couchdbserver:
     image: couchdb
-    restart: always
+    restart: unless-stopped
     ports:
       - "5984:5984"
     environment:
@@ -139,7 +139,7 @@ services:
       - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
       - COUCHDB_SERVER_IP_ADDR=${COUCHDB_SERVER_IP_ADDR}
       - PERIPHERAL=${PERIPHERAL}  
-    restart: "no"
+    restart: unless-stopped
     command: sh -c "/setup/couchdbinit.sh"
     depends_on: 
         - couchdbserver
