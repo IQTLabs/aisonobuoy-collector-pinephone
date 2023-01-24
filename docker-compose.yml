@@ -9,17 +9,40 @@ services:
       context: ./edgetech-core/mqtt
       dockerfile: ./Dockerfile
     restart: unless-stopped
+  audio-recorder:
+    image: iqtlabs/edgetech-audio-recorder:latest
+    build:
+      context: ../edgetech-audio-recorder/audiorecorder
+      dockerfile: ./Dockerfile
+    environment:
+    devices:
+      - "/dev/snd:/dev/snd"
+    environment:
+      - SEND_DATA_TOPIC=/AISonobuoy/<HOSTNAME>/Audio/edgetech-audio-recorder/string
+      - C2_TOPIC=/AISonobuoy/<HOSTNAME>/C2/edgetech-c2/string
+      - DATA_ROOT=/sensor-data
+      - SENSOR_DIR=audio
+      - FILE_PREFIX=hydrophone_audio_
+      - MQTT_IP=mqtt
+    volumes:
+      - /home/mobian/sensor-data:/sensor-data
+    restart: unless-stopped
+    depends_on: 
+      - mqtt
   filesaver:
     image: iqtlabs/edgetech-filesaver:latest
     build:
       context: ./edgetech-filesaver/filesaver
       dockerfile: ./Dockerfile
     environment:
-      - TO_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/AIS/edgetech-daisy/bytestring
-      - C2C_TOPIC=/AISonobuoy/<HOSTNAME>/C2C/edgetech-c2c/string
+      - SENSOR_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/AIS/edgetech-daisy/bytestring
+      - TELEMETRY_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/telemetry/telemetry/string
+      - C2_TOPIC=/AISonobuoy/<HOSTNAME>/C2/edgetech-c2/string
       - DATA_ROOT=/sensor-data
       - SENSOR_DIR=ais
-      - FILE_PREFIX=daisy_ais_
+      - TELEMETRY_DIR=telemetry
+      - SENSOR_FILE_PREFIX=daisy_ais_
+      - TELEMETRY_FILE_PREFIX=pinephone_telemetry_
       - MQTT_IP=mqtt
     volumes:
       - /home/mobian/sensor-data:/sensor-data
@@ -82,7 +105,9 @@ services:
       context: ./edgetech-couchdb-saver/couchdbsaver
       dockerfile: ./Dockerfile
     environment:
-      - TO_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/AIS/edgetech-daisy/bytestring
+      - SENSOR_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/AIS/edgetech-daisy/bytestring
+      - TELEMETRY_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/telemetry/telemetry/string
+      - AUDIO_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/Audio/edgetech-audio-recorder/string
       - MQTT_IP=mqtt
       - COUCHDB_USER=${COUCHDB_USER}
       - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
@@ -118,22 +143,16 @@ services:
     command: sh -c "/setup/couchdbinit.sh"
     depends_on: 
         - couchdbserver
-  # audio-recorder:
-  #   image: iqtlabs/edgetech-audio-recorder:latest
+  # http-uploader:
+  #   image: iqtlabs/edgetech-http-uploader:latest
   #   build:
-  #     context: ../edgetech-audio-recorder/audiorecorder
+  #     context: ../edgetech-http-uploader/http-uploader
   #     dockerfile: ./Dockerfile
   #   environment:
-  #   devices:
-  #     - "/dev/snd:/dev/serial1"
+  #     - WEBHOOK_URL=${WEBHOOK_URL:?error}
+  #     - WEBHOOK_TOKEN=${WEBHOOK_TOKEN:?error}
   #   restart: unless-stopped
-  #   environment:
-  #     - SEND_DATA_TOPIC=/AISonobuoy/<HOSTNAME>/Audio/edgetech-audio-recorder/string
-  #     - SERIAL_PORT=/dev/serial1
-  #     - C2_TOPIC=/AISonobuoy/<HOSTNAME>/C2/edgetech-c2/string
-  #     - DATA_ROOT=/sensor-data
-  #     - SENSOR_DIR=audio
-  #     - FILE_PREFIX=hydrophone_audio_
-  #     - MQTT_IP=mqtt
-  #   volumes:
-  #     - /home/mobian/sensor-data:/sensor-data
+  #   depends_on: 
+  #     - mqtt
+  #   env_file:
+  #     - .env
