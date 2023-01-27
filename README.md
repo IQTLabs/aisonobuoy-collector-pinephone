@@ -15,8 +15,9 @@ aisonobuoy-collector-pinephone
 |-- edgetech-database-sync
 |-- edgetech-audio-recorder
 |-- edgetech-http-uploader
-... IN PROGRESS
 |-- edgetech-s3-uploader
+... IN PROGRESS
+|-- edgetech-pinephone-gps
 ```
 
 To run `cd` into the `aisonobuoy-collector-pinephone` repo and run `docker-compose up --build`.
