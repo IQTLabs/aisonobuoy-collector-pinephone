@@ -69,7 +69,7 @@ services:
       context: ./edgetech-c2/c2
       dockerfile: ./Dockerfile
     environment:
-      - NEXT_FILE_TOPIC=/AISonobuoy/<HOSTNAME>/C2/edgetech-c2/string
+      - C2_TOPIC=/AISonobuoy/<HOSTNAME>/C2/edgetech-c2/string
       - MQTT_IP=mqtt
     volumes:
       - /home/mobian/sensor-data:/sensor-data
@@ -105,6 +105,7 @@ services:
       - COUCHDB_USER=${COUCHDB_USER}
       - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
       - COUCHDB_SERVER_IP_ADDR=${COUCHDB_SERVER_IP_ADDR}
+      - DEVICE_IP=${DEVICE_IP}
     volumes:
       - /home/mobian/sensor-data:/sensor-data
     restart: unless-stopped
@@ -132,7 +133,7 @@ services:
       - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
       - COUCHDB_SERVER_IP_ADDR=${COUCHDB_SERVER_IP_ADDR}
       - PERIPHERAL=${PERIPHERAL}  
-    restart: unless-stopped
+    restart: "no"
     command: sh -c "/setup/couchdbinit.sh"
     depends_on: 
         - couchdbserver
@@ -142,10 +143,30 @@ services:
       context: ./edgetech-http-uploader/httpuploader
       dockerfile: ./Dockerfile
     environment:
-      - WEBHOOK_URL=${WEBHOOK_URL:?error}
-      - WEBHOOK_TOKEN=${WEBHOOK_TOKEN:?error}
+      - WEBHOOK_URL=${WEBHOOK_URL}
+      - WEBHOOK_TOKEN=${WEBHOOK_TOKEN}
     restart: unless-stopped
     depends_on: 
       - mqtt
     env_file:
       - .env
+  s3-uploader:
+    image: iqtlabs/edgetech-s3-uploader:latest
+    build:
+      context: ./edgetech-s3-uploader/s3-uploader
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?error}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?error}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN:?error}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:?error}
+      - SEND_DATA_TOPIC=/AISonobuoy/<HOSTNAME>/edgetech-s3-uploader/string
+      - C2_TOPIC=/AISonobuoy/<HOSTNAME>/C2/edgetech-c2/string
+      - TARGET_DIR=/sensor-data
+      - S3_BUCKET=aisonobuoy-test
+      - MQTT_IP=mqtt
+    env_file:
+      - .env
+    volumes:
+      - /home/mobian/sensor-data:/sensor-data
