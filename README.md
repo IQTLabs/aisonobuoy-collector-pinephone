@@ -13,8 +13,9 @@ aisonobuoy-collector-pinephone
 |-- edgetech-pinephone-telemetry
 |-- edgetech-couchdb-saver
 |-- edgetech-database-sync
-... IN PROGRESS
 |-- edgetech-audio-recorder
+|-- edgetech-http-uploader
+... IN PROGRESS
 |-- edgetech-s3-uploader
 ```
 
