@@ -5,16 +5,9 @@ services:
     ports:
       - "1883:1883"
       - "9001:9001"
-    build:
-      context: ./edgetech-core/mqtt
-      dockerfile: ./Dockerfile
     restart: unless-stopped
   audio-recorder:
     image: iqtlabs/edgetech-audio-recorder:latest
-    build:
-      context: ./edgetech-audio-recorder/audiorecorder
-      dockerfile: ./Dockerfile
-    environment:
     devices:
       - "/dev/snd:/dev/snd"
     environment:
@@ -31,9 +24,6 @@ services:
       - mqtt
   filesaver:
     image: iqtlabs/edgetech-filesaver:latest
-    build:
-      context: ./edgetech-filesaver/filesaver
-      dockerfile: ./Dockerfile
     environment:
       - SENSOR_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/AIS/edgetech-daisy/bytestring
       - TELEMETRY_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/telemetry/telemetry/string
@@ -57,17 +47,11 @@ services:
       - SEND_DATA_TOPIC=/AISonobuoy/<HOSTNAME>/AIS/edgetech-daisy/bytestring
       - SERIAL_PORT=/dev/serial0
       - MQTT_IP=mqtt
-    build:
-      context: ./edgetech-daisy/daisy
-      dockerfile: ./Dockerfile
     restart: unless-stopped
     depends_on: 
       - mqtt
   c2:
     image: iqtlabs/edgetech-c2:latest
-    build:
-      context: ./edgetech-c2/c2
-      dockerfile: ./Dockerfile
     environment:
       - C2_TOPIC=/AISonobuoy/<HOSTNAME>/C2/edgetech-c2/string
       - MQTT_IP=mqtt
@@ -78,9 +62,6 @@ services:
       - mqtt
   telemetry:
     image: iqtlabs/edgetech-telemetry:latest
-    build:
-      context: ./edgetech-telemetry-pinephone/telemetry
-      dockerfile: ./Dockerfile
     environment:
       - TELEMETRY_TOPIC=/AISonobuoy/<HOSTNAME>/telemetry/telemetry/string
       - BATTERY_CAPACITY_FILE_PATH=/battery_capacity
@@ -94,9 +75,6 @@ services:
       - mqtt
   couchdbsaver:
     image: iqtlabs/edgetech-couchdbsaver:latest
-    build:
-      context: ./edgetech-couchdb-saver/couchdbsaver
-      dockerfile: ./Dockerfile
     environment:
       - SENSOR_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/AIS/edgetech-daisy/bytestring
       - TELEMETRY_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/telemetry/telemetry/string
@@ -127,7 +105,7 @@ services:
   couchdbsetup:
     image: couchdb
     volumes:
-      - ./edgetech-database-sync/couchdb/setup:/setup
+      - ../edgetech-database-sync/couchdb/setup:/setup
     environment:
       - COUCHDB_USER=${COUCHDB_USER}
       - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
@@ -139,9 +117,6 @@ services:
         - couchdbserver
   http-uploader:
     image: iqtlabs/edgetech-http-uploader:latest
-    build:
-      context: ./edgetech-http-uploader/httpuploader
-      dockerfile: ./Dockerfile
     environment:
       - WEBHOOK_URL=${WEBHOOK_URL}
       - WEBHOOK_TOKEN=${WEBHOOK_TOKEN}
@@ -152,9 +127,6 @@ services:
       - .env
   s3-uploader:
     image: iqtlabs/edgetech-s3-uploader:latest
-    build:
-      context: ./edgetech-s3-uploader/s3-uploader
-      dockerfile: ./Dockerfile
     restart: unless-stopped
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?error}
