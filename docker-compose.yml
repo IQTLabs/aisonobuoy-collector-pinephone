@@ -1,7 +1,14 @@
 version: "3"
 services:
+  watchtower:
+      image: containrrr/watchtower:latest
+      network_mode: "host"
+      environment:
+        - WATCHTOWER_POLL_INTERVAL:3600
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
   mqtt:
-    image: iqtlabs/edgetech-mqtt:latest
+    image: iqtlabs/edgetech-mqtt:${SERVICES_IMAGE_TAG:-latest}
     ports:
       - "1883:1883"
       - "9001:9001"
@@ -10,11 +17,10 @@ services:
       dockerfile: ./Dockerfile
     restart: unless-stopped
   audio-recorder:
-    image: iqtlabs/edgetech-audio-recorder:latest
+    image: iqtlabs/edgetech-audio-recorder:${SERVICES_IMAGE_TAG:-latest}
     build:
       context: ./edgetech-audio-recorder/audiorecorder
       dockerfile: ./Dockerfile
-    environment:
     devices:
       - "/dev/snd:/dev/snd"
     environment:
@@ -30,7 +36,7 @@ services:
     depends_on: 
       - mqtt
   filesaver:
-    image: iqtlabs/edgetech-filesaver:latest
+    image: iqtlabs/edgetech-filesaver:${SERVICES_IMAGE_TAG:-latest}
     build:
       context: ./edgetech-filesaver/filesaver
       dockerfile: ./Dockerfile
@@ -50,7 +56,7 @@ services:
     depends_on: 
       - mqtt
   daisy:
-    image: iqtlabs/edgetech-daisy:latest
+    image: iqtlabs/edgetech-daisy:${SERVICES_IMAGE_TAG:-latest}
     devices:
       - "/dev/ttyACM0:/dev/serial0"
     environment:
@@ -64,7 +70,7 @@ services:
     depends_on: 
       - mqtt
   c2:
-    image: iqtlabs/edgetech-c2:latest
+    image: iqtlabs/edgetech-c2:${SERVICES_IMAGE_TAG:-latest}
     build:
       context: ./edgetech-c2/c2
       dockerfile: ./Dockerfile
@@ -77,7 +83,7 @@ services:
     depends_on: 
       - mqtt
   telemetry:
-    image: iqtlabs/edgetech-telemetry:latest
+    image: iqtlabs/edgetech-telemetry:${SERVICES_IMAGE_TAG:-latest}
     build:
       context: ./edgetech-telemetry-pinephone/telemetry
       dockerfile: ./Dockerfile
@@ -93,7 +99,7 @@ services:
     depends_on: 
       - mqtt
   couchdbsaver:
-    image: iqtlabs/edgetech-couchdbsaver:latest
+    image: iqtlabs/edgetech-couchdbsaver:${SERVICES_IMAGE_TAG:-latest}
     build:
       context: ./edgetech-couchdb-saver/couchdbsaver
       dockerfile: ./Dockerfile
@@ -113,7 +119,7 @@ services:
       - couchdbserver
       - couchdbsetup
   couchdbserver:
-    image: couchdb
+    image: couchdb:latest
     restart: unless-stopped
     ports:
       - "5984:5984"
@@ -124,7 +130,7 @@ services:
     volumes:
         - /home/mobian/dbdata:/opt/couchdb/data
   couchdbsetup:
-    image: couchdb
+    image: couchdb:latest
     volumes:
       - ./edgetech-database-sync/couchdb/setup:/setup
     environment:
@@ -137,7 +143,7 @@ services:
     depends_on: 
         - couchdbserver
   http-uploader:
-    image: iqtlabs/edgetech-http-uploader:latest
+    image: iqtlabs/edgetech-http-uploader:${SERVICES_IMAGE_TAG:-latest}
     build:
       context: ./edgetech-http-uploader/httpuploader
       dockerfile: ./Dockerfile
