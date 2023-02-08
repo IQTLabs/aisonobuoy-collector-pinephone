@@ -111,3 +111,32 @@ To run `cd` into the `aisonobuoy-collector-pinephone` repo and run `docker-compo
 ### Assembly
 
 <img src="./hardware/media/pinephone-aisonobuoy-system.gif" width="600  ">
+
+## Roadmap
+
+- TBA
+
+See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
+
+## Contributing
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b dev`)
+3. Commit your Changes (`git commit -m 'adding some feature'`)
+5. Push to the Branch (`git push origin dev`)
+6. Open a Pull Request
+
+See `CONTRIBUTING.md` for more information.
+
+## License
+
+Distributed under the [Apache 2.0](https://github.com/IQTLabs/edgetech-filesaver/blob/main/LICENSE). See `LICENSE.txt` for more information.
+
+## Contact IQTLabs
+
+  - Twtiter: [@iqtlabs](https://twitter.com/iqtlabs)
+  - Email: info@iqtlabs.org
+
+See our other projects: [https://github.com/IQTLabs/](https://github.com/IQTLabs/)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
