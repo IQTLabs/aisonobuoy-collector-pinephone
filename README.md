@@ -34,8 +34,7 @@
 <h1 align="center">AISonobuoy-Collector-PinePhone</h1>
 
   <p align="center">
-    A PinePhone based maritime data collection system. Designed for continuous hydrophone audio, AIS, and other telemetry data collection for machine learning dataset creation.
-    This system is part of the IQT Labs [AI Sonobuoy](https://github.com/IQTLabs/AISonobuoy) project.
+    A PinePhone based maritime data collection system for the IQT Labs <a href="https://github.com/IQTLabs/AISonobuoy">AI Sonobuoy project</a>. Designed for continuous hydrophone audio, AIS, and other telemetry data collection for machine learning dataset creation. 
     <br/>
     <br/>
     <a href="https://github.com/IQTLabs/aisonobuoy-collector-pinephone/pulls">Make Contribution</a>
