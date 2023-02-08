@@ -46,13 +46,13 @@
   </p>
 </div>
 
-| <img src="./hardware/media/pinephone-aisonobuoy-system.png" width="600  "> |
-|:--:|
-| PinePhone Collector Field Kit|
-
 ## About
 
 The PinePhone Collection System is designed to leverage readily accessible consumer electronics and open-source software in order to create a low-cost collection platform for maritime data. The primary functions of the PinePhone Collection System are hydrophone audio and AIS recording. The [software system](#software) utilizes a series of docker containers which extend the [EdgeTech platform](https://github.com/IQTLabs/edgetech-core/), which is a bus message architecture built on MQTT, to implement the collection functions. The [hardware and electronics](#hardware) are all readily available components which are plug-and-play and can be fitted into a dry box container with a few 3D printed parts.
+
+| <img src="./hardware/media/pinephone-aisonobuoy-system.png" width="600  "> |
+|:--:|
+| PinePhone Collector Field Kit|
 
 ## Software
 
