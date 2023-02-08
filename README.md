@@ -54,7 +54,7 @@ The PinePhone Collection System is designed to leverage readily accessible consu
 |:--:|
 | PinePhone Collector Field Kit|
 
-## Software
+## Getting Started
 
 ### Running
 
@@ -65,6 +65,10 @@ git clone https://github.com/IQTLabs/aisonobuoy-collector-pinephone.git
 cd aisonobuoy-collector-pinephone
 docker-compose up
 ```
+
+#### Prerequisites
+
+Running this repo requires that you have the PinePhone configured with [Docker](https://www.docker.com/) installed. See [EdgeTech Device Setup](https://github.com/IQTLabs/edgetech-core/tree/main/device-setup-scripts).
 
 ### Development
 The current required directory structure is below. You will need to clone the `edgetech` repos into your environment (they will be listed as submodules to this repo at the time of the first version tag).
@@ -108,7 +112,7 @@ To run `cd` into the `aisonobuoy-collector-pinephone` repo and run `docker-compo
 - [Lid Phone Mount]()
 - [Drybox component mount insert]()
 
-### Assembly
+### Assembly Animation (Coming soon...)
 
 <img src="./hardware/media/pinephone-aisonobuoy-system.gif" width="600  ">
 
