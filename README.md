@@ -70,6 +70,36 @@ docker-compose up
 Running this repo requires that you have the PinePhone configured with [Docker](https://www.docker.com/) installed. See [EdgeTech Device Setup](https://github.com/IQTLabs/edgetech-core/tree/main/device-setup-scripts).
 
 ### Development
+
+The PinePhone Collector software system utilizes a series of docker containers which extend the [EdgeTech platform](https://github.com/IQTLabs/edgetech-core/), which is a bus message architecture built on MQTT, to implement the collection functions. The implementation of the EdgeTech module docker containers are linked in the diagram below.
+
+``` mermaid
+flowchart TD
+    mqtt[MQTT] --- edgetech-s3-uploader(S3 Uploader)
+    mqtt[MQTT] --- edgetech-telemetry-pinephone(PinePhone Telemetry)
+    mqtt[MQTT] --- edgetech-http-uploader(HTTP Uploader)
+    mqtt[MQTT] --- edgetech-daisy(AIS Daisy)
+    mqtt[MQTT] --- edgetech-c2(C2)
+    mqtt[MQTT] --- edgetech-filesaver(File Saver)
+    mqtt[MQTT] --- edgetech-audio-recorder(Audio Recorder)
+    mqtt[MQTT] --- edgetech-gps-pinephone(GPS)
+    mqtt[MQTT] --- edgetech-couchdb-saver(CouchDB Saver)
+    
+    click mqtt https://github.com/IQTLabs/edgetech-core
+    click edgetech-s3-uploader "https://github.com/IQTLabs/edgetech-s3-uploader​"
+    click edgetech-telemetry-pinephone "https://github.com/IQTLabs/edgetech-telemetry-pinephone​"
+    click edgetech-http-uploader "https://github.com/IQTLabs/edgetech-http-uploader​"
+    click edgetech-daisy "https://github.com/IQTLabs/edgetech-daisy​"
+    click edgetech-c2 "https://github.com/IQTLabs/edgetech-c2​"
+    click edgetech-filesaver "https://github.com/IQTLabs/edgetech-filesaver"
+    click edgetech-audio-recorder "https://github.com/IQTLabs/edgetech-audio-recorder​"
+    click edgetech-gps-pinephone "https://github.com/IQTLabs/edgetech-gps-pinephone"
+    click edgetech-couchdb-startup "https://github.com/IQTLabs/edgetech-couchdb-startup​"
+    click edgetech-couchdb-saver "https://github.com/IQTLabs/edgetech-couchdb-saver"
+
+style mqtt fill:#0072bc,color:#ffffff
+```
+
 The current required directory structure is below. You will need to clone the `edgetech` repos into your environment (they will be listed as submodules to this repo at the time of the first version tag).
 
 ```
@@ -89,7 +119,7 @@ aisonobuoy-collector-pinephone
 |-- edgetech-pinephone-gps
 ```
 
-To run `cd` into the `aisonobuoy-collector-pinephone` repo and run `docker-compose up --build`.
+Refer to the [dev](https://github.com/IQTLabs/aisonobuoy-collector-pinephone/tree/dev) branch for development and contribution documentation.
 
 ## Hardware
 
