@@ -84,7 +84,7 @@ flowchart TD
     edgetech-couchdb-saver(CouchDB Saver) -- Write to Database --> couchdbserver(CouchDB Server)
     edgetech-couchdb-startup(CouchDB Startup) -- Initalized Connection --> couchdbserver(CouchDB Server)
     edgetech-couchdb-startup(CouchDB Startup) -- Initalized Connection --> couchdbremote[Cloud-Hosted CouchDB Server]
-    couchdbserver(CouchDB Server) -- Sync Data with External Databse --> couchdbremote[Cloud-Hosted CouchDB Server]
+    edgetech-couchdb-server(CouchDB Server) -- Sync Data with External Databse --> couchdbremote[Cloud-Hosted CouchDB Server]
     
     mqtt{MQTT} -- Subscribed to Telemetry Topic, dAISy Sensor Topic, and Audio File Name Topic --> edgetech-couchdb-saver(CouchDB Saver)
     mqtt{MQTT} -- Subscribed to Telemetry Topic, dAISy Sensor Topic, and Command & Control Topic --> edgetech-filesaver(Filesaver)
@@ -102,7 +102,7 @@ style edgetech-couchdb-saver fill:#F9D308,color:#ffffff
 style edgetech-telemetry-pinephone fill:#80c342,color:#ffffff
 style edgetech-daisy fill:#80c342,color:#ffffff
 style edgetech-couchdb-startup fill:#6657d3,color:#ffffff
-style couchdbserver fill:#6657d3,color:#ffffff
+style edgetech-couchdb-server fill:#6657d3,color:#ffffff
 style couchdbremote fill:#5f6475,color:#ffffff
 style edgetech-filesaver fill:#F9D308,color:#ffffff
 style edgetech-c2 fill:#f05343,color:#ffffff
@@ -121,6 +121,7 @@ click edgetech-c2 "https://github.com/IQTLabs/edgetech-c2"
 click edgetech-filesaver "https://github.com/IQTLabs/edgetech-filesaver"
 click edgetech-audio-recorder "https://github.com/IQTLabs/edgetech-audio-recorder"
 click edgetech-couchdb-startup "https://github.com/IQTLabs/edgetech-couchdb-startup"
+click edgetech-couchdb-server "https://github.com/IQTLabs/edgetech-couchdb-startup"
 click edgetech-couchdb-saver "https://github.com/IQTLabs/edgetech-couchdb-saver"
 ```
 
