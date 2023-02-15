@@ -82,7 +82,7 @@ flowchart TD
     edgetech-c2(C2) -- Command & Control Topic --> mqtt{MQTT}
 
     edgetech-couchdb-saver(CouchDB Saver) -- Write to Database --> couchdbserver(CouchDB Server)
-    edgetech-couchdb-startup(CouchDB Startup) -- Initalized Connection --> couchdbserver(CouchDB Server)
+    edgetech-couchdb-startup(CouchDB Startup) -- Initalized Connection --> edgetech-couchdb-server(CouchDB Server)
     edgetech-couchdb-startup(CouchDB Startup) -- Initalized Connection --> couchdbremote[Cloud-Hosted CouchDB Server]
     edgetech-couchdb-server(CouchDB Server) -- Sync Data with External Databse --> couchdbremote[Cloud-Hosted CouchDB Server]
     
