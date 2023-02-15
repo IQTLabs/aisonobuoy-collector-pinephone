@@ -75,53 +75,52 @@ The PinePhone Collector software system utilizes a series of docker containers w
 
 ``` mermaid
 flowchart TD
-    audiorecorder(Audio Recorder) -- Recorded Audio File Name Topic --> mqtt{MQTT}
-    telemetrydata(Telemetry Data) -- Telemetry Data Topic --> mqtt{MQTT}
-    sensordata(dAISy Sensor Data) -- dAISy Sensor Data Topic --> mqtt{MQTT}
+    edgetech-audio-recorder(Audio Recorder) -- Recorded Audio File Name Topic --> mqtt{MQTT}
+    edgetech-telemetry-pinephone(Telemetry Data) -- Telemetry Data Topic --> mqtt{MQTT}
+    edgetech-daisy(dAISy Sensor Data) -- dAISy Sensor Data Topic --> mqtt{MQTT}
 
-    c2(C2) -- Command & Control Topic --> mqtt{MQTT}
+    edgetech-c2(C2) -- Command & Control Topic --> mqtt{MQTT}
 
-    couchdbsaver(CouchDB Saver) -- Write to Database --> couchdbserver(CouchDB Server)
-    couchdbstartup(CouchDB Startup) -- Initalized Connection --> couchdbserver(CouchDB Server)
-    couchdbstartup(CouchDB Startup) -- Initalized Connection --> couchdbremote[Cloud-Hosted CouchDB Server]
+    edgetech-couchdb-saver(CouchDB Saver) -- Write to Database --> couchdbserver(CouchDB Server)
+    edgetech-couchdb-startup(CouchDB Startup) -- Initalized Connection --> couchdbserver(CouchDB Server)
+    edgetech-couchdb-startup(CouchDB Startup) -- Initalized Connection --> couchdbremote[Cloud-Hosted CouchDB Server]
     couchdbserver(CouchDB Server) -- Sync Data with External Databse --> couchdbremote[Cloud-Hosted CouchDB Server]
     
-    mqtt{MQTT} -- Subscribed to Telemetry Topic, dAISy Sensor Topic, and Audio File Name Topic --> couchdbsaver(CouchDB Saver)
-    mqtt{MQTT} -- Subscribed to Telemetry Topic, dAISy Sensor Topic, and Command & Control Topic --> filesaver(Filesaver)
+    mqtt{MQTT} -- Subscribed to Telemetry Topic, dAISy Sensor Topic, and Audio File Name Topic --> edgetech-couchdb-saver(CouchDB Saver)
+    mqtt{MQTT} -- Subscribed to Telemetry Topic, dAISy Sensor Topic, and Command & Control Topic --> edgetech-filesaver(Filesaver)
 
-    mqtt{MQTT} -- Subscribed to Command & Control Topic --> audiorecorder(Audio Recorder)
-    mqtt{MQTT} -- Subscribed to Telemetry Topic --> http-uploader(HTTP Uploader)
-    http-uploader(HTTP Uploader) -- POST data to HTTP Endpoint --> httpendpoint[Cloud-Hosted HTTP Endpoint: currently TagIO.io]
+    mqtt{MQTT} -- Subscribed to Command & Control Topic --> edgetech-audio-recorder(Audio Recorder)
+    mqtt{MQTT} -- Subscribed to Telemetry Topic --> edgetech-http-uploader(HTTP Uploader)
+    edgetech-http-uploader(HTTP Uploader) -- POST data to HTTP Endpoint --> httpendpoint[Cloud-Hosted HTTP Endpoint: currently TagIO.io]
 
-    mqtt{MQTT} -- Subscribed to  Command & Control Topic --> s3-uploader(S3 Uploader)
-    s3-uploader(S3 Uploader) -- Upload files to External S3 Bucket --> s3remote[Cloud-Hosted AWS S3 Bucket]
+    mqtt{MQTT} -- Subscribed to  Command & Control Topic --> edgetech-s3-uploader(S3 Uploader)
+    edgetech-s3-uploader(S3 Uploader) -- Upload files to External S3 Bucket --> s3remote[Cloud-Hosted AWS S3 Bucket]
 
 
 style mqtt fill:#0072bc,color:#ffffff
-style couchdbsaver fill:#F9D308,color:#ffffff
-style telemetrydata fill:#80c342,color:#ffffff
-style sensordata fill:#80c342,color:#ffffff
-style couchdbstartup fill:#6657d3,color:#ffffff
+style edgetech-couchdb-saver fill:#F9D308,color:#ffffff
+style edgetech-telemetry-pinephone fill:#80c342,color:#ffffff
+style edgetech-daisy fill:#80c342,color:#ffffff
+style edgetech-couchdb-startup fill:#6657d3,color:#ffffff
 style couchdbserver fill:#6657d3,color:#ffffff
 style couchdbremote fill:#5f6475,color:#ffffff
-style filesaver fill:#F9D308,color:#ffffff
-style c2 fill:#f05343,color:#ffffff
-style audiorecorder fill:#80c342,color:#ffffff
-style s3-uploader fill:#F9D308,color:#ffffff
+style edgetech-filesaver fill:#F9D308,color:#ffffff
+style edgetech-c2 fill:#f05343,color:#ffffff
+style edgetech-audio-recorder fill:#80c342,color:#ffffff
+style edgetech-s3-uploader fill:#F9D308,color:#ffffff
 style s3remote fill:#5f6475,color:#ffffff
-style http-uploader fill:#F9D308,color:#ffffff
+style edgetech-http-uploader fill:#F9D308,color:#ffffff
 style httpendpoint fill:#5f6475,color:#ffffff
 
-click mqtt https://github.com/IQTLabs/edgetech-core
-click edgetech-s3-uploader "https://github.com/IQTLabs/edgetech-s3-uploader<200b>"
-click edgetech-telemetry-pinephone "https://github.com/IQTLabs/edgetech-telemetry-pinephone<200b>"
-click edgetech-http-uploader "https://github.com/IQTLabs/edgetech-http-uploader<200b>"
-click edgetech-daisy "https://github.com/IQTLabs/edgetech-daisy<200b>"
-click edgetech-c2 "https://github.com/IQTLabs/edgetech-c2<200b>"
+click mqtt "https://github.com/IQTLabs/edgetech-core"
+click edgetech-s3-uploader "https://github.com/IQTLabs/edgetech-s3-uploader"
+click edgetech-telemetry-pinephone "https://github.com/IQTLabs/edgetech-telemetry-pinephone"
+click edgetech-http-uploader "https://github.com/IQTLabs/edgetech-http-uploader"
+click edgetech-daisy "https://github.com/IQTLabs/edgetech-daisy"
+click edgetech-c2 "https://github.com/IQTLabs/edgetech-c2"
 click edgetech-filesaver "https://github.com/IQTLabs/edgetech-filesaver"
-click edgetech-audio-recorder "https://github.com/IQTLabs/edgetech-audio-recorder<200b>"
-click edgetech-gps-pinephone "https://github.com/IQTLabs/edgetech-gps-pinephone"
-click edgetech-couchdb-startup "https://github.com/IQTLabs/edgetech-couchdb-startup<200b>"
+click edgetech-audio-recorder "https://github.com/IQTLabs/edgetech-audio-recorder"
+click edgetech-couchdb-startup "https://github.com/IQTLabs/edgetech-couchdb-startup"
 click edgetech-couchdb-saver "https://github.com/IQTLabs/edgetech-couchdb-saver"
 ```
 
