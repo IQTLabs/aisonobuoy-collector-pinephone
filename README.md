@@ -98,18 +98,18 @@ flowchart TD
 
 
 style mqtt fill:#0072bc,color:#ffffff
-style edgetech-couchdb-saver fill:#F9D308,color:#ffffff
+style edgetech-couchdb-saver fill:#F9D308,color:#5f6475
 style edgetech-telemetry-pinephone fill:#80c342,color:#ffffff
 style edgetech-daisy fill:#80c342,color:#ffffff
 style edgetech-couchdb-startup fill:#6657d3,color:#ffffff
-style edgetech-couchdb-server fill:#6657d3,color:#ffffff
+style couchdbserver fill:#6657d3,color:#ffffff
 style couchdbremote fill:#5f6475,color:#ffffff
-style edgetech-filesaver fill:#F9D308,color:#ffffff
+style edgetech-filesaver fill:#F9D308,color:#5f6475
 style edgetech-c2 fill:#f05343,color:#ffffff
 style edgetech-audio-recorder fill:#80c342,color:#ffffff
-style edgetech-s3-uploader fill:#F9D308,color:#ffffff
+style edgetech-s3-uploader fill:#F9D308,color:#5f6475
 style s3remote fill:#5f6475,color:#ffffff
-style edgetech-http-uploader fill:#F9D308,color:#ffffff
+style edgetech-http-uploader fill:#F9D308,color:#5f6475
 style httpendpoint fill:#5f6475,color:#ffffff
 
 click mqtt "https://github.com/IQTLabs/edgetech-core"
