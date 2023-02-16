@@ -102,7 +102,7 @@ style edgetech-couchdb-saver fill:#F9D308,color:#5f6475
 style edgetech-telemetry-pinephone fill:#80c342,color:#ffffff
 style edgetech-daisy fill:#80c342,color:#ffffff
 style edgetech-couchdb-startup fill:#6657d3,color:#ffffff
-style couchdbserver fill:#6657d3,color:#ffffff
+style edgetech-couchdb-server fill:#6657d3,color:#ffffff
 style couchdbremote fill:#5f6475,color:#ffffff
 style edgetech-filesaver fill:#F9D308,color:#5f6475
 style edgetech-c2 fill:#f05343,color:#ffffff
