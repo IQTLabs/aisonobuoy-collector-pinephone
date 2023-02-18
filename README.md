@@ -47,7 +47,7 @@
 
 ## About
 
-The PinePhone Collection System is designed to leverage readily accessible consumer electronics and open-source software in order to create a low-cost collection platform for maritime data. The primary functions of the PinePhone Collection System are hydrophone audio and AIS recording. The [software system](#software) utilizes a series of docker containers which extend the [EdgeTech platform](https://github.com/IQTLabs/edgetech-core/), which is a bus message architecture built on MQTT, to implement the collection functions. The [hardware and electronics](#hardware) are all readily available components which are plug-and-play and can be fitted into a dry box container with a few 3D printed parts.
+The PinePhone Collection System is designed to leverage readily accessible consumer electronics and open-source software in order to create a low-cost collection platform for maritime data. The primary functions of the PinePhone Collection System are hydrophone audio and AIS recording. The [software system](#software) utilizes a series of docker containers which extend the [EdgeTech platform](https://github.com/IQTLabs/edgetech-core/), a bus message architecture built on MQTT, to implement the collection functions. The [hardware and electronics](#hardware) are all readily available components which are plug-and-play and can be fitted into a dry box container with a few 3D printed parts.
 
 | <img src="./hardware/media/pinephone-aisonobuoy-system.png" width="600  "> |
 |:--:|
@@ -71,7 +71,7 @@ Running this repo requires that you have the PinePhone configured with [Docker](
 
 ### Development
 
-The PinePhone Collector software system utilizes a series of docker containers which extend the [EdgeTech platform](https://github.com/IQTLabs/edgetech-core/), which is a bus message architecture built on MQTT, to implement the collection functions. The implementation of the EdgeTech module docker containers are linked in the diagram below.
+The PinePhone Collector software system utilizes a series of docker containers which extend the [EdgeTech platform](https://github.com/IQTLabs/edgetech-core/), a bus message architecture built on MQTT, to implement the collection functions. The implementation of the EdgeTech module docker containers are linked in the diagram below.
 
 ``` mermaid
 flowchart TD
@@ -144,7 +144,7 @@ aisonobuoy-collector-pinephone
 |-- edgetech-pinephone-gps
 ```
 
-Refer to the [dev](https://github.com/IQTLabs/aisonobuoy-collector-pinephone/tree/dev) branch for development and contribution documentation.
+Contributions should be pushed to the [dev](https://github.com/IQTLabs/aisonobuoy-collector-pinephone/tree/dev) branch. See instructions in [Contributing](#contributing).
 
 ## Hardware
 
@@ -188,7 +188,7 @@ See `CONTRIBUTING.md` for more information.
 
 ## License
 
-Distributed under the [Apache 2.0](https://github.com/IQTLabs/edgetech-filesaver/blob/main/LICENSE). See `LICENSE.txt` for more information.
+Distributed under the [Apache 2.0](https://github.com/IQTLabs/aisonobuoy-collector-pinephone/blob/main/LICENSE). See `LICENSE` for more information.
 
 ## Contact IQTLabs
 
