@@ -25,3 +25,6 @@
 [submodule "edgetech-couchdb-startup"]
 	path = edgetech-couchdb-startup
 	url = https://github.com/IQTLabs/edgetech-couchdb-startup.git
+[submodule "edgetech-core"]
+	path = edgetech-core
+	url = https://github.com/IQTLabs/edgetech-core.git
