@@ -17,163 +17,174 @@ services:
       context: ./edgetech-core/mqtt
       dockerfile: ./Dockerfile
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "10"
   audio-recorder:
     image: iqtlabs/edgetech-audio-recorder:${SERVICES_IMAGE_TAG:-latest}
     build:
-      context: ./edgetech-audio-recorder/audiorecorder
+      context: ./edgetech-audio-recorder/audio-recorder
       dockerfile: ./Dockerfile
     devices:
       - "/dev/snd:/dev/snd"
-    environment:
-      - SEND_DATA_TOPIC=/AISonobuoy/<HOSTNAME>/Audio/edgetech-audio-recorder/string
-      - C2_TOPIC=/AISonobuoy/<HOSTNAME>/C2/edgetech-c2/string
-      - DATA_ROOT=/sensor-data
-      - SENSOR_DIR=audio
-      - FILE_PREFIX=hydrophone_audio_
-      - MQTT_IP=mqtt
     volumes:
       - /home/mobian/sensor-data:/sensor-data
     restart: unless-stopped
     depends_on: 
       - mqtt
+    env_file:
+      - .env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "10"
   filesaver:
     image: iqtlabs/edgetech-filesaver:${SERVICES_IMAGE_TAG:-latest}
     build:
       context: ./edgetech-filesaver/filesaver
       dockerfile: ./Dockerfile
-    environment:
-      - SENSOR_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/AIS/edgetech-daisy/bytestring
-      - TELEMETRY_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/telemetry/telemetry/string
-      - C2_TOPIC=/AISonobuoy/<HOSTNAME>/C2/edgetech-c2/string
-      - DATA_ROOT=/sensor-data
-      - SENSOR_DIR=ais
-      - TELEMETRY_DIR=telemetry
-      - SENSOR_FILE_PREFIX=daisy_ais_
-      - TELEMETRY_FILE_PREFIX=pinephone_telemetry_
-      - MQTT_IP=mqtt
     volumes:
       - /home/mobian/sensor-data:/sensor-data
     restart: unless-stopped
     depends_on: 
       - mqtt
+    env_file:
+      - .env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "10"
   daisy:
     image: iqtlabs/edgetech-daisy:${SERVICES_IMAGE_TAG:-latest}
     devices:
       - "/dev/ttyACM0:/dev/serial0"
-    environment:
-      - SEND_DATA_TOPIC=/AISonobuoy/<HOSTNAME>/AIS/edgetech-daisy/bytestring
-      - SERIAL_PORT=/dev/serial0
-      - MQTT_IP=mqtt
     build:
       context: ./edgetech-daisy/daisy
       dockerfile: ./Dockerfile
     restart: unless-stopped
     depends_on: 
       - mqtt
+    env_file:
+      - .env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "10"
   c2:
     image: iqtlabs/edgetech-c2:${SERVICES_IMAGE_TAG:-latest}
     build:
       context: ./edgetech-c2/c2
       dockerfile: ./Dockerfile
-    environment:
-      - C2_TOPIC=/AISonobuoy/<HOSTNAME>/C2/edgetech-c2/string
-      - MQTT_IP=mqtt
     volumes:
       - /home/mobian/sensor-data:/sensor-data
     restart: unless-stopped
     depends_on: 
       - mqtt
+    env_file:
+      - .env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "10"
   telemetry:
     image: iqtlabs/edgetech-telemetry:${SERVICES_IMAGE_TAG:-latest}
     build:
       context: ./edgetech-telemetry-pinephone/telemetry
       dockerfile: ./Dockerfile
-    environment:
-      - TELEMETRY_TOPIC=/AISonobuoy/<HOSTNAME>/telemetry/telemetry/string
-      - BATTERY_CAPACITY_FILE_PATH=/battery_capacity
-      - UPTIME_FILE_PATH=/uptime
-      - MQTT_IP=mqtt
     volumes:
       - /sys/class/power_supply/rk818-battery/capacity:/battery_capacity
       - /proc/uptime:/uptime
     restart: unless-stopped
     depends_on: 
       - mqtt
-  couchdbsaver:
-    image: iqtlabs/edgetech-couchdbsaver:${SERVICES_IMAGE_TAG:-latest}
+    env_file:
+      - .env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "10"
+  couchdb-server:
+    image: couchdb:3.1.1
+    restart: unless-stopped
+    ports:
+      - "5984:5984"
+    volumes:
+        - /home/mobian/couchdb-data:/opt/couchdb/data
+    env_file:
+      - .env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "10"
+  couchdb-startup:
+    image: iqtlabs/edgetech-couchdb-startup:latest
     build:
-      context: ./edgetech-couchdb-saver/couchdbsaver
+      context: ./edgetech-couchdb-startup/couchdb-startup
       dockerfile: ./Dockerfile
-    environment:
-      - SENSOR_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/AIS/edgetech-daisy/bytestring
-      - TELEMETRY_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/telemetry/telemetry/string
-      - AUDIO_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/Audio/edgetech-audio-recorder/string
-      - MQTT_IP=mqtt
-      - COUCHDB_USER=${COUCHDB_USER}
-      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
-      - COUCHDB_SERVER_IP_ADDR=${COUCHDB_SERVER_IP_ADDR}
-      - DEVICE_IP=${DEVICE_IP}
+    restart: "no"
+    env_file:
+      - .env
+    depends_on:
+      - couchdb-server
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "10"
+  couchdb-saver:
+    image: iqtlabs/edgetech-couchdb-saver:latest
+    build:
+      context: ./edgetech-couchdb-saver/couchdb-saver
+      dockerfile: ./Dockerfile
     volumes:
       - /home/mobian/sensor-data:/sensor-data
     restart: unless-stopped
     depends_on: 
       - mqtt
-      - couchdbserver
-      - couchdbsetup
-  couchdbserver:
-    image: couchdb:latest
-    restart: unless-stopped
-    ports:
-      - "5984:5984"
-    environment:
-      - COUCHDB_USER=${COUCHDB_USER}
-      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
-      - COUCHDB_SERVER_IP_ADDR=${COUCHDB_SERVER_IP_ADDR}
-    volumes:
-        - /home/mobian/dbdata:/opt/couchdb/data
-  couchdbsetup:
-    image: couchdb:latest
-    volumes:
-      - ./edgetech-database-sync/couchdb/setup:/setup
-    environment:
-      - COUCHDB_USER=${COUCHDB_USER}
-      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
-      - COUCHDB_SERVER_IP_ADDR=${COUCHDB_SERVER_IP_ADDR}
-      - PERIPHERAL=${PERIPHERAL}  
-    restart: "no"
-    command: sh -c "/setup/couchdbinit.sh"
-    depends_on: 
-        - couchdbserver
-  http-uploader:
-    image: iqtlabs/edgetech-http-uploader:${SERVICES_IMAGE_TAG:-latest}
-    build:
-      context: ./edgetech-http-uploader/httpuploader
-      dockerfile: ./Dockerfile
-    environment:
-      - WEBHOOK_URL=${WEBHOOK_URL}
-      - WEBHOOK_TOKEN=${WEBHOOK_TOKEN}
-    restart: unless-stopped
-    depends_on: 
-      - mqtt
     env_file:
       - .env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "10"
   s3-uploader:
     image: iqtlabs/edgetech-s3-uploader:latest
     build:
       context: ./edgetech-s3-uploader/s3-uploader
       dockerfile: ./Dockerfile
     restart: unless-stopped
-    environment:
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?error}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?error}
-      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN:?error}
-      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:?error}
-      - SEND_DATA_TOPIC=/AISonobuoy/<HOSTNAME>/edgetech-s3-uploader/string
-      - C2_TOPIC=/AISonobuoy/<HOSTNAME>/C2/edgetech-c2/string
-      - TARGET_DIR=/sensor-data
-      - S3_BUCKET=aisonobuoy-test
-      - MQTT_IP=mqtt
     env_file:
       - .env
     volumes:
       - /home/mobian/sensor-data:/sensor-data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "10"
+    depends_on: 
+      - mqtt
+  http-uploader:
+    image: iqtlabs/edgetech-http-uploader:latest
+    build:
+      context: ./edgetech-http-uploader/http-uploader
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    depends_on: 
+      - mqtt
+    env_file:
+      - .env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "10"
