@@ -107,7 +107,7 @@ services:
         max-size: "10M"
         max-file: "10"
   couchdb-startup:
-    image: iqtlabs/edgetech-couchdb-startup:latest
+    image: iqtlabs/edgetech-couchdb-startup:${SERVICES_IMAGE_TAG:-latest}
     restart: "no"
     env_file:
       - .env
@@ -119,7 +119,7 @@ services:
         max-size: "10M"
         max-file: "10"
   couchdb-saver:
-    image: iqtlabs/edgetech-couchdb-saver:latest
+    image: iqtlabs/edgetech-couchdb-saver:${SERVICES_IMAGE_TAG:-latest}
     volumes:
       - /home/mobian/sensor-data:/sensor-data
     restart: unless-stopped
@@ -133,7 +133,7 @@ services:
         max-size: "10M"
         max-file: "10"
   s3-uploader:
-    image: iqtlabs/edgetech-s3-uploader:latest
+    image: iqtlabs/edgetech-s3-uploader:${SERVICES_IMAGE_TAG:-latest}
     restart: unless-stopped
     env_file:
       - .env
@@ -147,7 +147,7 @@ services:
     depends_on: 
       - mqtt
   http-uploader:
-    image: iqtlabs/edgetech-http-uploader:latest
+    image: iqtlabs/edgetech-http-uploader:${SERVICES_IMAGE_TAG:-latest}
     restart: unless-stopped
     depends_on: 
       - mqtt
