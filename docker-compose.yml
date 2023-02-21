@@ -125,7 +125,7 @@ services:
         max-size: "10M"
         max-file: "10"
   couchdb-startup:
-    image: iqtlabs/edgetech-couchdb-startup:latest
+    image: iqtlabs/edgetech-couchdb-startup:${SERVICES_IMAGE_TAG:-latest}
     build:
       context: ./edgetech-couchdb-startup/couchdb-startup
       dockerfile: ./Dockerfile
@@ -140,7 +140,7 @@ services:
         max-size: "10M"
         max-file: "10"
   couchdb-saver:
-    image: iqtlabs/edgetech-couchdb-saver:latest
+    image: iqtlabs/edgetech-couchdb-saver:${SERVICES_IMAGE_TAG:-latest}
     build:
       context: ./edgetech-couchdb-saver/couchdb-saver
       dockerfile: ./Dockerfile
@@ -157,7 +157,7 @@ services:
         max-size: "10M"
         max-file: "10"
   s3-uploader:
-    image: iqtlabs/edgetech-s3-uploader:latest
+    image: iqtlabs/edgetech-s3-uploader:${SERVICES_IMAGE_TAG:-latest}
     build:
       context: ./edgetech-s3-uploader/s3-uploader
       dockerfile: ./Dockerfile
@@ -174,7 +174,7 @@ services:
     depends_on: 
       - mqtt
   http-uploader:
-    image: iqtlabs/edgetech-http-uploader:latest
+    image: iqtlabs/edgetech-http-uploader:${SERVICES_IMAGE_TAG:-latest}
     build:
       context: ./edgetech-http-uploader/http-uploader
       dockerfile: ./Dockerfile
