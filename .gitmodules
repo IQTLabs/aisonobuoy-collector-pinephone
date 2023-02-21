@@ -1,0 +1,27 @@
+[submodule "edgetech-audio-recorder"]
+	path = edgetech-audio-recorder
+	url = https://github.com/IQTLabs/edgetech-audio-recorder.git
+[submodule "edgetech-filesaver"]
+	path = edgetech-filesaver
+	url = https://github.com/IQTLabs/edgetech-filesaver.git
+[submodule "edgetech-daisy"]
+	path = edgetech-daisy
+	url = https://github.com/IQTLabs/edgetech-daisy.git
+[submodule "edgetech-couchdb-saver"]
+	path = edgetech-couchdb-saver
+	url = https://github.com/IQTLabs/edgetech-couchdb-saver.git
+[submodule "edgetech-c2"]
+	path = edgetech-c2
+	url = https://github.com/IQTLabs/edgetech-c2.git
+[submodule "edgetech-telemetry-pinephone"]
+	path = edgetech-telemetry-pinephone
+	url = https://github.com/IQTLabs/edgetech-telemetry-pinephone.git
+[submodule "edgetech-s3-uploader"]
+	path = edgetech-s3-uploader
+	url = https://github.com/IQTLabs/edgetech-s3-uploader.git
+[submodule "edgetech-http-uploader"]
+	path = edgetech-http-uploader
+	url = https://github.com/IQTLabs/edgetech-http-uploader.git
+[submodule "edgetech-couchdb-startup"]
+	path = edgetech-couchdb-startup
+	url = https://github.com/IQTLabs/edgetech-couchdb-startup.git
