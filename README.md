@@ -125,15 +125,15 @@ click edgetech-couchdb-server "https://github.com/IQTLabs/edgetech-couchdb-start
 click edgetech-couchdb-saver "https://github.com/IQTLabs/edgetech-couchdb-saver"
 ```
 
-The current required directory structure is below. You will need to clone the `edgetech` repos into your environment (they will be listed as submodules to this repo at the time of the first version tag).
+The current required directory structure is below for the development build. You can find this at the [dev](https://github.com/IQTLabs/aisonobuoy-collector-pinephone/tree/dev) branch.
 
 ```
 aisonobuoy-collector-pinephone
-|-- docker-compose.yaml
+|-- docker-compose.yml
 |-- edgetech-core
 |-- edgetech-daisy
 |-- edgetech-filesaver
-|-- edgetech-c2c
+|-- edgetech-c2
 |-- edgetech-pinephone-telemetry
 |-- edgetech-couchdb-saver
 |-- edgetech-database-sync
