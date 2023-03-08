@@ -1,14 +1,24 @@
 version: "3"
+
+networks:
+    pinebuoy:
+      driver: bridge
+      driver_opts:
+        com.docker.network.driver.mtu: 900
+
 services:
   watchtower:
+      networks:
+        - pinebuoy
       image: containrrr/watchtower:latest
-      network_mode: "host"
       environment:
         - WATCHTOWER_POLL_INTERVAL:3600
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
       command: --interval ${WATCHTOWER_POLL_INTERVAL:-3600}
   mqtt:
+    networks:
+      - pinebuoy
     image: iqtlabs/edgetech-mqtt:${SERVICES_IMAGE_TAG:-latest}
     ports:
       - "1883:1883"
@@ -20,6 +30,8 @@ services:
         max-size: "10M"
         max-file: "10"
   audio-recorder:
+    networks:
+      - pinebuoy
     image: iqtlabs/edgetech-audio-recorder:${SERVICES_IMAGE_TAG:-latest}
     devices:
       - "/dev/snd:/dev/snd"
@@ -36,6 +48,8 @@ services:
         max-size: "10M"
         max-file: "10"
   filesaver:
+    networks:
+      - pinebuoy
     image: iqtlabs/edgetech-filesaver:${SERVICES_IMAGE_TAG:-latest}
     volumes:
       - /home/mobian/sensor-data:/sensor-data
@@ -50,6 +64,8 @@ services:
         max-size: "10M"
         max-file: "10"
   daisy:
+    networks:
+      - pinebuoy
     image: iqtlabs/edgetech-daisy:${SERVICES_IMAGE_TAG:-latest}
     devices:
       - "/dev/ttyACM0:/dev/serial0"
@@ -64,6 +80,8 @@ services:
         max-size: "10M"
         max-file: "10"
   c2:
+    networks:
+      - pinebuoy
     image: iqtlabs/edgetech-c2:${SERVICES_IMAGE_TAG:-latest}
     volumes:
       - /home/mobian/sensor-data:/sensor-data
@@ -78,6 +96,8 @@ services:
         max-size: "10M"
         max-file: "10"
   telemetry:
+    networks:
+      - pinebuoy
     image: iqtlabs/edgetech-telemetry:${SERVICES_IMAGE_TAG:-latest}
     volumes:
       - /sys/class/power_supply/rk818-battery/capacity:/battery_capacity
@@ -93,6 +113,8 @@ services:
         max-size: "10M"
         max-file: "10"
   couchdb-server:
+    networks:
+      - pinebuoy
     image: couchdb:3.1.1
     restart: unless-stopped
     ports:
@@ -107,6 +129,8 @@ services:
         max-size: "10M"
         max-file: "10"
   couchdb-startup:
+    networks:
+      - pinebuoy
     image: iqtlabs/edgetech-couchdb-startup:${SERVICES_IMAGE_TAG:-latest}
     restart: "no"
     env_file:
@@ -119,6 +143,8 @@ services:
         max-size: "10M"
         max-file: "10"
   couchdb-saver:
+    networks:
+      - pinebuoy
     image: iqtlabs/edgetech-couchdb-saver:${SERVICES_IMAGE_TAG:-latest}
     volumes:
       - /home/mobian/sensor-data:/sensor-data
@@ -133,6 +159,8 @@ services:
         max-size: "10M"
         max-file: "10"
   s3-uploader:
+    networks:
+      - pinebuoy
     image: iqtlabs/edgetech-s3-uploader:${SERVICES_IMAGE_TAG:-latest}
     restart: unless-stopped
     env_file:
@@ -147,6 +175,8 @@ services:
     depends_on: 
       - mqtt
   http-uploader:
+    networks:
+      - pinebuoy
     image: iqtlabs/edgetech-http-uploader:${SERVICES_IMAGE_TAG:-latest}
     restart: unless-stopped
     depends_on: 
